@@ -1,0 +1,73 @@
+#!/bin/bash
+#required for dovecot compilation
+sudo apt install -y qemu qemu-user-static debootstrap
+sudo dpkg --add-architecture armhf
+sudo apt update
+sudo mkdir /debarm
+sudo debootstrap --arch=armhf buster /debarm
+sudo chroot /debarm
+
+apt install -y wget curl gawk bison flex default-libmysqlclient-dev liblua5.3-dev libldap-dev  autoconf automake \
+libtool pkg-config gettext pandoc make libssl-dev  libsystemd-dev libexpat-dev liblucene++-dev \
+libpq-dev libkrb5-dev libsqlite3-dev libpam-dev libsasl2-dev libapparmor-dev libbz2-dev liblzma-dev \
+liblz4-dev libzstd-dev libtirpc-dev libclucene-dev libstemmer-dev libsodium-dev libexttextcat-dev 
+
+echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sources.list
+echo deb http://deb.debian.org/debian bullseye main >> /etc/apt/sources.list
+apt install -t buster-backports checkinstall
+apt install -t bullseye gcc
+#krb5
+
+
+git clone https://github.com/dovecot/core.git dovecot 
+
+mkdir /usr/share/doc/
+mkdir /usr/share/doc/dovecot
+mkdir /usr/share/doc/dovecot/doc
+mkdir /usr/share/doc/dovecot/doc/man
+mkdir /usr/share/doc/dovecot/doc/wiki
+mkdir /usr/local/libexec
+mkdir /usr/local/libexec/dovecot
+mkdir /usr/local/lib/dovecot
+mkdir /usr/local/share/man
+mkdir /usr/local/share/man/man1
+mkdir /usr/local/share/dovecot
+mkdir /usr/local/share/aclocal
+mkdir /usr/local/share/dovecot/stopwords
+mkdir /usr/local/include/dovecot
+mkdir /usr/local/etc/dovecot
+mkdir /usr/local/lib/dovecot/sieve
+mkdir /usr/local/lib/dovecot/settings
+mkdir /usr/local/share/doc/dovecot/sieve
+mkdir /usr/local/share/doc/dovecot/sieve/extensions
+
+cd dovecot
+sed -i 's/[2.4.devel]/[2.3.17]/g' configure.ac
+./autogen.sh
+./configure --enable-maintainer-mode --with-lua=plugin --with-ldap=plugin --with-sql=plugin --with-mysql \
+--with-sqlite --with-pgsql --with-lucene --with-gssapi=plugin  --with-solr
+make
+checkinstall -y
+
+cd /build/
+
+wget https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-0.5.17.1.tar.gz 
+
+tar -xf dovecot-2.3-pigeonhole-0.5.17.1.tar.gz
+
+cd dovecot-2.3-pigeonhole-0.5.17.1
+
+./configure --with-ldap=plugin --with-managesieve
+make
+checkinstall -y
+
+cd /build
+
+curl -fsSL https://get.docker.com -o get-docker.sh 
+
+chmod +x get-docker.sh
+./get-docker.sh
+
+
+
+##sieve / managed sieve compilation
