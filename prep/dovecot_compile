@@ -1,5 +1,5 @@
 #!/bin/bash
-#required for dovecot compilation
+#create chroot and compile dovecot
 sudo apt install -y qemu qemu-user-static debootstrap
 sudo dpkg --add-architecture armhf
 sudo apt update
