@@ -7,6 +7,8 @@ ENV LC_ALL C
 ENV GOSU_VERSION 1.12
 
 # Add groups and users before installing Dovecot to not break compatibility
+COPY dovecot_2.3.17-1_armhf.deb /tmp
+COPY dovecot-2.3-pigeonhole_0.5.17.1-1_armhf.deb /tmp
 RUN groupadd -g 5000 vmail \
   && groupadd -g 401 dovecot \
   && groupadd -g 402 dovenull \
@@ -88,20 +90,8 @@ RUN groupadd -g 5000 vmail \
   && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
   && chmod +x /usr/local/bin/gosu \
   && gosu nobody true \
-  && apt-key adv --fetch-keys https://repo.dovecot.org/DOVECOT-REPO-GPG \
-  && echo "deb https://repo.dovecot.org/ce-${DOVECOT}/debian/buster buster main" > /etc/apt/sources.list.d/dovecot.list \
-  && apt-get update \
-  && apt-get -y --no-install-recommends install \
-  dovecot-lua \
-  dovecot-managesieved \
-  dovecot-sieve \
-  dovecot-lmtpd \
-  dovecot-ldap \
-  dovecot-mysql \
-  dovecot-core \
-  dovecot-pop3d \
-  dovecot-imapd \
-  dovecot-solr \
+  && apt-get install -f /tmp/dovecot_2.3.17-1_armhf.deb
+  && apt-get install -f /tmp/dovecot-2.3-pigeonhole_0.5.17.1-1_armhf.deb
   && pip3 install mysql-connector-python html2text jinja2 redis \
   && apt-get autoremove --purge -y \
   && apt-get autoclean \
