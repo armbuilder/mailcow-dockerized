@@ -1,5 +1,8 @@
-FROM debian:bullseye-slim
-LABEL maintainer "Andre Peters <andre.peters@servercow.de>"
+ARG DEVICE="ODROID-XU4"
+ARG REPO="balenalib\"
+
+FROM ${REPO}${DEVICE}debian:bullseye-slim
+LABEL maintainer "armbuilder"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG SOGO_DEBIAN_REPOSITORY=http://packages.inverse.ca/SOGo/nightly/5/debian/

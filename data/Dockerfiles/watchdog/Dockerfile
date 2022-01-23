@@ -1,6 +1,8 @@
-FROM alpine:3.14
-LABEL maintainer "André Peters <andre.peters@servercow.de>"
+ARG DEVICE="ODROID-XU4"
+ARG REPO="balenalib\"
+FROM ${REPO}${DEVICE}alpine:3.14
 
+LABEL maintainer "armbuilder"
 # Installation
 RUN apk add --update \
   && apk add --no-cache nagios-plugins-smtp \

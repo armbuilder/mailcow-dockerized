@@ -1,6 +1,8 @@
-FROM alpine:3.14
+ARG DEVICE="ODROID-XU4"
+ARG REPO="balenalib\"
+FROM ${REPO}${DEVICE}alpine:3.14
 
-LABEL maintainer "Andre Peters <andre.peters@servercow.de>"
+LABEL maintainer "armbuilder"
 
 RUN apk add --update --no-cache \
 	curl \
