@@ -1,6 +1,4 @@
-ARG DEVICE="ODROID-XU4"
-ARG REPO="balenalib\"
-FROM ${REPO}${DEVICE}alpine:3.14
+FROM $alpine:3.14
 
 LABEL maintainer "armbuilder"
 # Installation
