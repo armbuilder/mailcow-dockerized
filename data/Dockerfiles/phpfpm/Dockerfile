@@ -61,7 +61,10 @@ RUN apk add -U --no-cache autoconf \
   && docker-php-ext-configure exif \
   && docker-php-ext-configure gd --with-freetype=/usr/include/ \  
     --with-jpeg=/usr/include/ \
-  && docker-php-ext-install -j 4 exif gd gettext intl ldap opcache pcntl pdo pdo_mysql pspell soap sockets zip bcmath gmp \
+  RUN apk add patch
+  COPY patch_file /tmp/patch_file
+  RUN patch /usr/src/php/ext/sockets/config.m4 -i /tmp/patch_file
+  RUN  docker-php-ext-install -j 4 exif gd gettext intl ldap opcache pcntl pdo pdo_mysql pspell soap sockets zip bcmath gmp \
   && docker-php-ext-configure imap --with-imap --with-imap-ssl \
   && docker-php-ext-install -j 4 imap \
   && curl --silent --show-error https://getcomposer.org/installer | php \
@@ -89,3 +92,4 @@ COPY ./docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["php-fpm"]
+
