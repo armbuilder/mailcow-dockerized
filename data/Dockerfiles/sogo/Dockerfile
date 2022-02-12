@@ -1,11 +1,8 @@
-ARG DEVICE="ODROID-XU4"
-ARG REPO="balenalib\"
-
-FROM ${REPO}${DEVICE}debian:bullseye-slim
+FROM debian:bullseye-slim
 LABEL maintainer "armbuilder"
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG SOGO_DEBIAN_REPOSITORY=http://packages.inverse.ca/SOGo/nightly/5/debian/
+ARG SOGO_DEBIAN_REPOSITORY=http://download.opensuse.org/repositories/home:/viking/Debian_11/
 ENV LC_ALL C
 ENV GOSU_VERSION 1.14
 
@@ -33,8 +30,8 @@ RUN echo "Building from repository $SOGO_DEBIAN_REPOSITORY" \
   && gosu nobody true \
   && mkdir /usr/share/doc/sogo \
   && touch /usr/share/doc/sogo/empty.sh \
-  && apt-key adv --keyserver keyserver.ubuntu.com --recv-key 0x810273C4 \
-  && echo "deb ${SOGO_DEBIAN_REPOSITORY} bullseye bullseye" > /etc/apt/sources.list.d/sogo.list \
+  && apt-key adv --fetch-keys http://download.opensuse.org/repositories/home:/viking/Debian_11/Release.key \
+  && echo "deb http://download.opensuse.org/repositories/home:/viking/Debian_11/ ./" > /etc/apt/sources.list.d/sogo.list \
   && apt-get update && apt-get install -y --no-install-recommends \
     sogo \
     sogo-activesync \
