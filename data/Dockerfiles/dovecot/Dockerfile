@@ -2,13 +2,11 @@ FROM debian:buster-slim
 LABEL maintainer "Andre Peters <andre.peters@servercow.de>"
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG DOVECOT=2.3.17
+ARG DOVECOT=2.3.17.1
 ENV LC_ALL C
 ENV GOSU_VERSION 1.12
 
 # Add groups and users before installing Dovecot to not break compatibility
-COPY dovecot_2.3.17-1_armhf.deb /tmp
-COPY dovecot-2.3-pigeonhole_0.5.17.1-1_armhf.deb /tmp
 RUN groupadd -g 5000 vmail \
   && groupadd -g 401 dovecot \
   && groupadd -g 402 dovenull \
@@ -90,8 +88,20 @@ RUN groupadd -g 5000 vmail \
   && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
   && chmod +x /usr/local/bin/gosu \
   && gosu nobody true \
-  && apt-get install -f /tmp/dovecot_2.3.17-1_armhf.deb
-  && apt-get install -f /tmp/dovecot-2.3-pigeonhole_0.5.17.1-1_armhf.deb
+  && apt-key adv --fetch-keys https://download.opensuse.org/repositories/home:/viking/Debian_10/Release.key \
+  && echo "deb https://download.opensuse.org/repositories/home:/viking/Debian_10/ ./" > /etc/apt/sources.list.d/dovecot.list \
+  && apt-get update \
+  && apt-get -y --no-install-recommends install \
+  dovecot-lua \
+  dovecot-managesieved \
+  dovecot-sieve \
+  dovecot-lmtpd \
+  dovecot-ldap \
+  dovecot-mysql \
+  dovecot-core \
+  dovecot-pop3d \
+  dovecot-imapd \
+  dovecot-solr \
   && pip3 install mysql-connector-python html2text jinja2 redis \
   && apt-get autoremove --purge -y \
   && apt-get autoclean \
@@ -104,8 +114,8 @@ COPY syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
 COPY syslog-ng-redis_slave.conf /etc/syslog-ng/syslog-ng-redis_slave.conf
 COPY imapsync /usr/local/bin/imapsync
 COPY imapsync_runner.pl /usr/local/bin/imapsync_runner.pl
-COPY report-spam.sieve /usr/local/lib/dovecot/sieve/report-spam.sieve
-COPY report-ham.sieve /usr/local/lib/dovecot/sieve/report-ham.sieve
+COPY report-spam.sieve /usr/lib/dovecot/sieve/report-spam.sieve
+COPY report-ham.sieve /usr/lib/dovecot/sieve/report-ham.sieve
 COPY rspamd-pipe-ham /usr/lib/dovecot/sieve/rspamd-pipe-ham
 COPY rspamd-pipe-spam /usr/lib/dovecot/sieve/rspamd-pipe-spam
 COPY sa-rules.sh /usr/local/bin/sa-rules.sh
