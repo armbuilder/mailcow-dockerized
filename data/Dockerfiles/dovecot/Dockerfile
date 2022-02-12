@@ -88,8 +88,8 @@ RUN groupadd -g 5000 vmail \
   && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
   && chmod +x /usr/local/bin/gosu \
   && gosu nobody true \
-  && apt-key adv --fetch-keys https://download.opensuse.org/repositories/home:/viking/Debian_10/Release.key \
-  && echo "deb https://download.opensuse.org/repositories/home:/viking/Debian_10/ ./" > /etc/apt/sources.list.d/dovecot.list \
+  && apt-key adv --fetch-keys http://download.opensuse.org/repositories/home:/viking/Debian_10/Release.key \
+  && echo "deb http://download.opensuse.org/repositories/home:/viking/Debian_10/ ./" > /etc/apt/sources.list.d/dovecot.list \
   && apt-get update \
   && apt-get -y --no-install-recommends install \
   dovecot-lua \
