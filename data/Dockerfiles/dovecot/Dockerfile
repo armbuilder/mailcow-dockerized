@@ -101,8 +101,9 @@ RUN groupadd -g 5000 vmail \
   dovecot-core \
   dovecot-pop3d \
   dovecot-imapd \
-  dovecot-solr \
-  && pip3 install mysql-connector-python html2text jinja2 redis \
+  dovecot-solr 
+  RUN pip3 install setuptools
+  RUN pip3 install mysql-connector-python html2text jinja2 redis \
   && apt-get autoremove --purge -y \
   && apt-get autoclean \
   && rm -rf /var/lib/apt/lists/* \
