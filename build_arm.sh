@@ -12,7 +12,7 @@ build_folders=(watchdog unbound postfix phpfpm olefy netfilter dockerapi acme so
 for item in ${build_folders[*]}
 do
    echo ${bpath}${mpath}${item}${file}
-   sudo docker buildx build  ${bpath}${mpath}${item} -t ${tag}${item}':'${type}'-'${version} --platform armhf --push
+   sudo docker buildx build  ${bpath}${mpath}${item} -t ${tag}${item}':'${type}'-'${version} --platform armhf,aarch64 --push
 done
 
 
