@@ -57,20 +57,20 @@ services:
           aliases:
             - redis
 
-    clamd-mailcow:
-      image: vikinger84/clamd:1.42
-      restart: always
-      dns:
-        - ${IPV4_NETWORK:-172.22.1}.254
-      environment:
-        - TZ=${TZ}
-        - SKIP_CLAMD=${SKIP_CLAMD:-n}
-      volumes:
-        - ./data/conf/clamav/:/etc/clamav/:Z
-      networks:
-        mailcow-network:
-          aliases:
-            - clamd
+    # clamd-mailcow:
+      # image: vikinger84/clamd:1.42
+      # restart: always
+      # dns:
+        # - ${IPV4_NETWORK:-172.22.1}.254
+      # environment:
+        # - TZ=${TZ}
+        # - SKIP_CLAMD=${SKIP_CLAMD:-n}
+      # volumes:
+        # - ./data/conf/clamav/:/etc/clamav/:Z
+      # networks:
+        # mailcow-network:
+          # aliases:
+            # - clamd
 
     rspamd-mailcow:
       image: vikinger84/rspamd:mcow-2.2022
@@ -522,21 +522,21 @@ services:
           aliases:
             - dockerapi
 
-    solr-mailcow:
-      image: vikinger84/solr:1.8
-      restart: always
-      volumes:
-        - solr-vol-1:/opt/solr/server/solr/dovecot-fts/data:Z
-      ports:
-        - "${SOLR_PORT:-127.0.0.1:18983}:8983"
-      environment:
-        - TZ=${TZ}
-        - SOLR_HEAP=${SOLR_HEAP:-1024}
-        - SKIP_SOLR=${SKIP_SOLR:-y}
-      networks:
-        mailcow-network:
-          aliases:
-            - solr
+    # solr-mailcow:
+      # image: vikinger84/solr:1.8
+      # restart: always
+      # volumes:
+        # - solr-vol-1:/opt/solr/server/solr/dovecot-fts/data:Z
+      # ports:
+        # - "${SOLR_PORT:-127.0.0.1:18983}:8983"
+      # environment:
+        # - TZ=${TZ}
+        # - SOLR_HEAP=${SOLR_HEAP:-1024}
+        # - SKIP_SOLR=${SKIP_SOLR:-y}
+      # networks:
+        # mailcow-network:
+          # aliases:
+            # - solr
 
     olefy-mailcow:
       image: vikinger84/olefy:mcow-2.2022
@@ -629,4 +629,3 @@ volumes:
   crypt-vol-1:
   sogo-web-vol-1:
   sogo-userdata-backup-vol-1:
-
