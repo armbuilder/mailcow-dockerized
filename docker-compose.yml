@@ -2,7 +2,7 @@ version: '2.1'
 services:
 
     unbound-mailcow:
-      image: mailcow/unbound:1.14
+      image: vikinger84/unbound:mcow-2.2022
       environment:
         - TZ=${TZ}
       volumes:
@@ -58,7 +58,7 @@ services:
             - redis
 
     clamd-mailcow:
-      image: mailcow/clamd:1.42
+      image: vikinger84/clamd:1.42
       restart: always
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
@@ -73,7 +73,7 @@ services:
             - clamd
 
     rspamd-mailcow:
-      image: mailcow/rspamd:1.79
+      image: vikinger84/rspamd:mcow-2.2022
       stop_grace_period: 30s
       depends_on:
         - dovecot-mailcow
@@ -103,7 +103,7 @@ services:
             - rspamd
 
     php-fpm-mailcow:
-      image: mailcow/phpfpm:1.78
+      image: vikinger84/phpfpm:mcow-2.2022
       command: "php-fpm -d date.timezone=${TZ} -d expose_php=0"
       depends_on:
         - redis-mailcow
@@ -164,7 +164,7 @@ services:
             - phpfpm
 
     sogo-mailcow:
-      image: mailcow/sogo:1.104
+      image: vikinger84/sogo:mcow-2.2022
       environment:
         - DBNAME=${DBNAME}
         - DBUSER=${DBUSER}
@@ -211,7 +211,7 @@ services:
             - sogo
 
     dovecot-mailcow:
-      image: mailcow/dovecot:1.158
+      image: vikinger84/dovecot:mcow-2.2022
       depends_on:
         - mysql-mailcow
       dns:
@@ -291,7 +291,7 @@ services:
             - dovecot
 
     postfix-mailcow:
-      image: mailcow/postfix:1.66
+      image: vikinger84/postfix:mcow-2.2022
       depends_on:
         - mysql-mailcow
       volumes:
@@ -384,7 +384,7 @@ services:
     acme-mailcow:
       depends_on:
         - nginx-mailcow
-      image: mailcow/acme:1.80
+      image: vikinger84/acme:mcow-2.2022
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       environment:
@@ -420,7 +420,7 @@ services:
             - acme
 
     netfilter-mailcow:
-      image: mailcow/netfilter:1.45
+      image: vikinger84/netfilter:mcow-2.2022
       stop_grace_period: 30s
       depends_on:
         - dovecot-mailcow
@@ -443,7 +443,7 @@ services:
         - /lib/modules:/lib/modules:ro
 
     watchdog-mailcow:
-      image: mailcow/watchdog:1.95
+      image: vikinger84/watchdog:mcow-2.2022
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       tmpfs:
@@ -505,7 +505,7 @@ services:
             - watchdog
 
     dockerapi-mailcow:
-      image: mailcow/dockerapi:1.40
+      image: vikinger84/dockerapi:mcow-2.2022
       security_opt:
         - label=disable
       restart: always
@@ -523,7 +523,7 @@ services:
             - dockerapi
 
     solr-mailcow:
-      image: mailcow/solr:1.8
+      image: vikinger84/solr:1.8
       restart: always
       volumes:
         - solr-vol-1:/opt/solr/server/solr/dovecot-fts/data:Z
@@ -539,7 +539,7 @@ services:
             - solr
 
     olefy-mailcow:
-      image: mailcow/olefy:1.8
+      image: vikinger84/olefy:mcow-2.2022
       restart: always
       environment:
         - TZ=${TZ}
@@ -629,3 +629,4 @@ volumes:
   crypt-vol-1:
   sogo-web-vol-1:
   sogo-userdata-backup-vol-1:
+
